@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Model Master P6</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      margin: auto;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    .bar {
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background: #4CAF50;
+      margin: 5px;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .correct { background: #4CAF50; color: white; }
+    .wrong { background: #f44336; color: white; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>🎮 Model Master: P6 Bar Challenge</h1>
+  <h3 id="score">Score: 0</h3>
+
+  <p id="question"></p>
+
+  <div id="choices"></div>
+  <div id="feedback"></div>
+  <div id="model"></div>
+  <div id="solution"></div>
+
+  <button onclick="nextQuestion()">➡️ Next Question</button>
+</div>
+
+<script>
+let score = 0;
+let qIndex = 0;
+
+const questions = [
+  {
+    text: "Tom has 3 times as much money as Sarah. Together they have $96. How much does Sarah have?",
+    correct: "Tom is bigger, ratio 3 : 1",
+    model: "<p>Sarah</p><div class='bar'></div><p>Tom</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
+    solution: "Total units = 4 → 96 ÷ 4 = 24<br><b>Sarah has $24</b>"
+  },
+  {
+    text: "Ali has $20 more than Ben. Together they have $100. How much does Ben have?",
+    correct: "Comparison with difference",
+    model: "<p>Ben</p><div class='bar'></div><p>Ali</p><div class='bar'></div><div class='bar' style='background:#ff9800'></div>",
+    solution: "Difference = $20 → Remaining = 80 → Ben = $40"
+  },
+  {
+    text: "The ratio of apples to oranges is 2 : 3. There are 25 fruits. How many apples?",
+    correct: "Ratio 2 : 3",
+    model: "<p>Apples</p><div class='bar'></div><div class='bar'></div><p>Oranges</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
+    solution: "Total units = 5 → 25 ÷ 5 = 5 → Apples = 10"
+  },
+  {
+    text: "Lisa spent 1/4 of her money and had $60 left. How much did she have at first?",
+    correct: "Fraction before-after",
+    model: "<p>Spent</p><div class='bar'></div><p>Left</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
+    solution: "3 units = 60 → 1 unit = 20 → Total = $80"
+  },
+  {
+    text: "John and Mark shared $72 in the ratio 5 : 7. How much did Mark get?",
+    correct: "Ratio 5 : 7",
+    model: "<p>John</p><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div>" +
+           "<p>Mark</p><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
+    solution: "Total units = 12 → 72 ÷ 12 = 6 → Mark = $42"
+  }
+];
+
+function loadQuestion() {
+  document.getElementById("question").innerHTML = "<b>Question:</b><br>" + questions[qIndex].text;
+  document.getElementById("choices").innerHTML =
+    "<button onclick='check(true)' class='correct'>Correct Model</button>" +
+    "<button onclick='check(false)' class='wrong'>Wrong Model</button>";
+  document.getElementById("feedback").innerHTML = "";
+  document.getElementById("model").innerHTML = "";
+  document.getElementById("solution").innerHTML = "";
+}
+
+function check(isCorrect) {
+  if (isCorrect) {
+    score += 10;
+    document.getElementById("feedback").innerHTML = "<p style='color:green;'>✅ Correct modelling!</p>";
+    document.getElementById("model").innerHTML = questions[qIndex].model;
+    document.getElementById("solution").innerHTML = questions[qIndex].solution;
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<p style='color:red;'>❌ Check who is bigger / total units again.</p>";
+  }
+  document.getElementById("score").innerText = "Score: " + score;
+}
+
+function nextQuestion() {
+  qIndex++;
+  if (qIndex >= questions.length) {
+    document.getElementById("question").innerHTML =
+      "🎉 Game Complete!<br>Your final score is <b>" + score + "</b>";
+    document.getElementById("choices").innerHTML = "";
+  } else {
+    loadQuestion();
+  }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
