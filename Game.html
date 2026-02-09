@@ -87,7 +87,7 @@ function checkAnswer(n){
     setTimeout(startLevel, 600);
   } else {
     // wrong → water rises slightly
-    waterLevel += 5;
+    waterLevel += 60;
     if(waterLevel > 100) waterLevel = 100;
     water.style.height = waterLevel + '%';
     lives--; livesEl.innerText = lives;
@@ -98,7 +98,7 @@ function checkAnswer(n){
 
 // gradually raise water
 setInterval(()=>{
-  waterLevel += 1; 
+  waterLevel += 2; 
   if(waterLevel > 100) waterLevel = 100;
   water.style.height = waterLevel + '%';
   checkWater();
