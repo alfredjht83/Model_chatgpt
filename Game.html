@@ -1,137 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Model Master P6</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f8ff;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-      margin: auto;
-      box-shadow: 0 0 10px #ccc;
-    }
-
-    .bar {
-      display: inline-block;
-      width: 60px;
-      height: 30px;
-      background: #4CAF50;
-      margin: 5px;
-      border-radius: 5px;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .correct { background: #4CAF50; color: white; }
-    .wrong { background: #f44336; color: white; }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puppy Rescue – PSLE Maths</title>
+<style>
+  body{margin:0; padding:0; font-family:Arial; text-align:center; background:#b3e5fc; overflow:hidden;}
+  h1{margin:10px;}
+  #scoreboard{display:flex; justify-content:space-around; margin:10px; font-size:18px;}
+  #problem{margin:10px; font-size:18px;}
+  #gameArea{position:relative; width:100%; height:500px; background:#81d4fa; border:2px solid #333; overflow:hidden;}
+  #water{position:absolute; bottom:0; width:100%; height:0%; background:#0288d1; transition:height 0.5s;}
+  #puppy{position:absolute; width:50px; height:50px; background:#ff7043; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; top:350px; left:50%; transform:translateX(-50%); transition:top 0.5s;}
+  #tiles{display:flex; justify-content:center; flex-wrap:wrap; margin-top:10px;}
+  .tile{width:80px; height:50px; background:#ffeb3b; color:#333; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; cursor:pointer; margin:5px;}
+  #message{font-size:18px; min-height:24px; margin-top:5px;}
+</style>
 </head>
-
 <body>
-
-<div class="box">
-  <h1>🎮 Model Master: P6 Bar Challenge</h1>
-  <h3 id="score">Score: 0</h3>
-
-  <p id="question"></p>
-
-  <div id="choices"></div>
-  <div id="feedback"></div>
-  <div id="model"></div>
-  <div id="solution"></div>
-
-  <button onclick="nextQuestion()">➡️ Next Question</button>
+<h1>🐶 Puppy Rescue – PSLE Maths</h1>
+<div id="scoreboard">
+  <div>Score: <span id="score">0</span></div>
+  <div>Lives: <span id="lives">3</span></div>
+  <div>Level: <span id="level">1</span>/10</div>
 </div>
+<div id="problem"></div>
+<div id="gameArea">
+  <div id="water"></div>
+  <div id="puppy">🐶</div>
+</div>
+<div id="tiles"></div>
+<div id="message"></div>
 
 <script>
-let score = 0;
-let qIndex = 0;
-
-const questions = [
-  {
-    text: "Tom has 3 times as much money as Sarah. Together they have $96. How much does Sarah have?",
-    correct: "Tom is bigger, ratio 3 : 1",
-    model: "<p>Sarah</p><div class='bar'></div><p>Tom</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
-    solution: "Total units = 4 → 96 ÷ 4 = 24<br><b>Sarah has $24</b>"
-  },
-  {
-    text: "Ali has $20 more than Ben. Together they have $100. How much does Ben have?",
-    correct: "Comparison with difference",
-    model: "<p>Ben</p><div class='bar'></div><p>Ali</p><div class='bar'></div><div class='bar' style='background:#ff9800'></div>",
-    solution: "Difference = $20 → Remaining = 80 → Ben = $40"
-  },
-  {
-    text: "The ratio of apples to oranges is 2 : 3. There are 25 fruits. How many apples?",
-    correct: "Ratio 2 : 3",
-    model: "<p>Apples</p><div class='bar'></div><div class='bar'></div><p>Oranges</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
-    solution: "Total units = 5 → 25 ÷ 5 = 5 → Apples = 10"
-  },
-  {
-    text: "Lisa spent 1/4 of her money and had $60 left. How much did she have at first?",
-    correct: "Fraction before-after",
-    model: "<p>Spent</p><div class='bar'></div><p>Left</p><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
-    solution: "3 units = 60 → 1 unit = 20 → Total = $80"
-  },
-  {
-    text: "John and Mark shared $72 in the ratio 5 : 7. How much did Mark get?",
-    correct: "Ratio 5 : 7",
-    model: "<p>John</p><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div>" +
-           "<p>Mark</p><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div><div class='bar'></div>",
-    solution: "Total units = 12 → 72 ÷ 12 = 6 → Mark = $42"
-  }
+const problems = [
+  {text:"Gerald has twice as many stamps as Amelia. Together they have 180 stamps. How many does Amelia have?", solution:60, options:[40,60,90,120]},
+  {text:"A fruit stall sold 50 more apples than oranges. Total fruits = 250. How many oranges?", solution:100, options:[80,90,100,110]},
+  {text:"The ratio of boys to girls in a class is 4 : 5. Total pupils = 81. How many are boys?", solution:36, options:[36,40,45,50]},
+  {text:"3/8 of the books are science books. 36 are science books. Total books?", solution:96, options:[80,90,96,100]},
+  {text:"A shop had some pencils. Sold 20, left 3 times sold. How many pencils initially?", solution:80, options:[60,70,80,90]},
+  {text:"Apples to pears = 3:4. 12 apples added → ratio 4:5. Original pears?", solution:240, options:[180,200,240,260]},
+  {text:"Jay gave away 2/5 of marbles, then 10 more. 36 left. How many initially?", solution:90, options:[80,85,90,95]},
+  {text:"Class: 2/7 girls. 9 girls left, 6 boys joined. Total now 40. Original boys?", solution:30, options:[28,30,32,34]},
+  {text:"Two amounts in ratio 5:8. Difference = $39. Total of both amounts?", solution:169, options:[150,160,169,180]},
+  {text:"Tank 3/4 full. 30L removed & replaced with juice. Water now 2/3. Tank capacity?", solution:360, options:[300,320,360,400]}
 ];
 
-function loadQuestion() {
-  document.getElementById("question").innerHTML = "<b>Question:</b><br>" + questions[qIndex].text;
-  document.getElementById("choices").innerHTML =
-    "<button onclick='check(true)' class='correct'>Correct Model</button>" +
-    "<button onclick='check(false)' class='wrong'>Wrong Model</button>";
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("model").innerHTML = "";
-  document.getElementById("solution").innerHTML = "";
+let current = 0, score = 0, lives = 3;
+let puppy = document.getElementById("puppy"), water = document.getElementById("water");
+let scoreEl = document.getElementById("score"), livesEl = document.getElementById("lives"), 
+    levelEl = document.getElementById("level"), problemEl = document.getElementById("problem"),
+    tilesEl = document.getElementById("tiles"), messageEl = document.getElementById("message");
+
+let waterLevel = 0; // %
+let jumpHeight = 60; // pixels
+
+function startLevel(){
+  messageEl.innerHTML = "";
+  levelEl.innerText = current+1;
+  problemEl.innerHTML = problems[current].text;
+  tilesEl.innerHTML = "";
+
+  let options = problems[current].options.slice();
+  shuffleArray(options);
+  options.forEach(n => {
+    let t = document.createElement("div");
+    t.className = "tile";
+    t.textContent = n;
+    t.onclick = () => checkAnswer(n);
+    tilesEl.appendChild(t);
+  });
 }
 
-function check(isCorrect) {
-  if (isCorrect) {
-    score += 10;
-    document.getElementById("feedback").innerHTML = "<p style='color:green;'>✅ Correct modelling!</p>";
-    document.getElementById("model").innerHTML = questions[qIndex].model;
-    document.getElementById("solution").innerHTML = questions[qIndex].solution;
+function checkAnswer(n){
+  if(n === problems[current].solution){
+    // correct → puppy jumps
+    let newTop = puppy.offsetTop - jumpHeight;
+    if(newTop < 0) newTop = 0;
+    puppy.style.top = newTop + 'px';
+    score += 10; scoreEl.innerText = score;
+    messageEl.innerHTML = "✅ Correct! Puppy jumps!";
+    current++;
+    if(current >= problems.length){
+      setTimeout(()=>alert("🎉 Puppy rescued! Final score: "+score), 300);
+      return;
+    }
+    setTimeout(startLevel, 600);
   } else {
-    document.getElementById("feedback").innerHTML =
-      "<p style='color:red;'>❌ Check who is bigger / total units again.</p>";
-  }
-  document.getElementById("score").innerText = "Score: " + score;
-}
-
-function nextQuestion() {
-  qIndex++;
-  if (qIndex >= questions.length) {
-    document.getElementById("question").innerHTML =
-      "🎉 Game Complete!<br>Your final score is <b>" + score + "</b>";
-    document.getElementById("choices").innerHTML = "";
-  } else {
-    loadQuestion();
+    // wrong → water rises slightly
+    waterLevel += 5;
+    if(waterLevel > 100) waterLevel = 100;
+    water.style.height = waterLevel + '%';
+    lives--; livesEl.innerText = lives;
+    messageEl.innerHTML = "❌ Wrong! Water rises!";
+    checkWater();
   }
 }
 
-loadQuestion();
+// gradually raise water
+setInterval(()=>{
+  waterLevel += 1; 
+  if(waterLevel > 100) waterLevel = 100;
+  water.style.height = waterLevel + '%';
+  checkWater();
+}, 5000);
+
+function checkWater(){
+  let puppyBottom = puppy.offsetTop + puppy.offsetHeight;
+  let waterTop = water.parentElement.offsetHeight - (waterLevel/100)*water.parentElement.offsetHeight;
+  if(puppyBottom > waterTop && lives > 0){
+    lives = 0;
+    livesEl.innerText = lives;
+    setTimeout(()=>alert("💀 Puppy drowned! Score: "+score), 100);
+  }
+}
+
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+startLevel();
 </script>
-
 </body>
 </html>
